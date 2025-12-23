@@ -22,6 +22,7 @@ Hvis ikke andet er nævnt, så indeholder link både forklaringer og kodeeksempl
 * Hough (cirkeldetektering): [https://docs.opencv.org/4.x/d4/d70/tutorial_hough_circle.html](https://docs.opencv.org/4.x/d4/d70/tutorial_hough_circle.html)
 * Hough-Ballard og Hough-Guil detektering. Detekter mere komplicerede objekter, såfremt de indeholder basale geometriske former: [https://docs.opencv.org/4.x/da/ddc/tutorial_generalized_hough_ballard_guil.html](https://docs.opencv.org/4.x/da/ddc/tutorial_generalized_hough_ballard_guil.html)
 * Contour detection (find omrids; brug sammen med erotion og dilation for bedste resultater): [https://docs.opencv.org/4.x/df/d0d/tutorial_find_contours.html](https://docs.opencv.org/4.x/df/d0d/tutorial_find_contours.html) 
+* Blob detection (find mere avancerede former, mange indstillinger): [https://learnopencv.com/blob-detection-using-opencv-python-c/](https://learnopencv.com/blob-detection-using-opencv-python-c/)
 
 ### Andre
 
@@ -50,3 +51,10 @@ Avanceret
 * Feature detection via ORB, SIFT, SURF: [https://docs.opencv.org/4.x/d7/d66/tutorial_feature_detection.html](https://docs.opencv.org/4.x/d7/d66/tutorial_feature_detection.html)
 * FLANN for feature matching (objektdetektering): [https://docs.opencv.org/4.x/d5/d6f/tutorial_feature_flann_matcher.html](https://docs.opencv.org/4.x/d5/d6f/tutorial_feature_flann_matcher.html)
     * Alternativt AKAZE: [https://docs.opencv.org/4.x/db/d70/tutorial_akaze_matching.html](https://docs.opencv.org/4.x/db/d70/tutorial_akaze_matching.html)
+
+### Machine Learning 
+
+Machine learning er ret avanceret og hardwaretungt. Derfor er det ikke obligatorisk, men det er anbefalelsesværdigt at prøve . Det er anvendeligt uanset use case, men forskellige modeller til forskellige use cases. OBS: Kan være langsomt hvis i ikke har en Nvidia GPU.
+
+* Definitiv DNN guide: [https://learnopencv.com/deep-learning-with-opencvs-dnn-module-a-definitive-guide/](https://learnopencv.com/deep-learning-with-opencvs-dnn-module-a-definitive-guide/)
+    
