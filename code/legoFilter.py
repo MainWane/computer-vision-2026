@@ -18,7 +18,7 @@ cv2.destroyAllWindows()
 def compareEdges(filteredImg):
     sobelx = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=5)
     sobely = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=5)
-    sobelxy = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=5)
+    sobelxy = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=5)
     canny = cv2.Canny(image=filteredImg, threshold1=100, threshold2=200)
     laplacian = cv2.convertScaleAbs(cv2.Laplacian(filteredImg, cv2.CV_64F))
     
@@ -74,9 +74,11 @@ def hueEdges(hsvimg):
 
 
 def contourDetection(grayimg):
-    grayimg = cv2.bilateralFilter(grayimg, 9, sigmaColor=75, sigmaSpace=75)
-    ret, thresh = cv2.threshold(grayimg, 100, 255, cv2.THRESH_BINARY)
+    #grayimg = cv2.bilateralFilter(grayimg, 9, sigmaColor=75, sigmaSpace=75)
+    grayimg = cv2.GaussianBlur(grayimg, (5, 5), 0)
+    ret, thresh = cv2.threshold(grayimg, 150, 255, cv2.THRESH_BINARY)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+    print(len(contours))
     grayCopy = grayimg.copy()
     cv2.drawContours(grayCopy, contours, -1, (0,255,0), 2, cv2.LINE_AA)
     cv2.imshow("Contours", grayCopy)
@@ -113,8 +115,8 @@ def showComparison():
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-compareThresholds(bilat)
+#compareThresholds(bilat)
 #blobDetection(gray)
 compareEdges(bilat)
 #hueEdges(hsv)
-#contourDetection(gray)
+contourDetection(gray)
