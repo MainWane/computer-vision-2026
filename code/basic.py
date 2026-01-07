@@ -3,13 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import colors
-from imageOperations import patchMaker
+from videoCapture import patchMaker
 
 
 # Indlæs billeder i henholdsvis BGR, gråtone og HSV 
-bgr = cv2.imread("../images/shapes.jpg", cv2.IMREAD_COLOR)
-gray = cv2.imread("../images/pills.jpg", cv2.IMREAD_GRAYSCALE)
-bgr2 = cv2.imread("../images/foggy_forest.jpg")
+bgr = cv2.imread("C:/Users/ulrik/Desktop/cvmaterial/ladybug.jpg", cv2.IMREAD_COLOR)
+gray = cv2.imread("C:/Users/ulrik/Desktop/cvmaterial/ladybug.jpg", cv2.IMREAD_GRAYSCALE)
+bgr2 = cv2.imread("C:/Users/ulrik/Desktop/cvmaterial/ladybug.jpg")
 hsv = cv2.cvtColor(bgr2, cv2.COLOR_BGR2HSV)
 
 # Vis billeders opløsning

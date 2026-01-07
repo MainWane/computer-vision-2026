@@ -2,35 +2,49 @@ import cv2
 import numpy as np 
 from matplotlib import pyplot as plt 
 
-gray = cv2.imread("../images/pills.jpg", 0)
-bgr = cv2.imread("../images/zebra.jpg")
+gray = cv2.imread("../images/teddy.jpg", 0)
+bgr = cv2.imread("../images/teddy.jpg")
 hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
 
-gauss = cv2.GaussianBlur(bgr, (11, 11), 0)
+gauss = cv2.GaussianBlur(gray, (21, 23), 0)
 bilat = cv2.bilateralFilter(gray, 5, sigmaColor=75, sigmaSpace=75)
 
+cv2.imshow("Original", gray)
+cv2.imshow("Gaussian", gauss)
+cv2.imshow("Bilateral", bilat)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 def compareEdges(filteredImg):
     sobelx = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=5)
     sobely = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=5)
-    sobelxy = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=5)
+    sobelxy = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=5)
     canny = cv2.Canny(image=filteredImg, threshold1=100, threshold2=200)
     laplacian = cv2.convertScaleAbs(cv2.Laplacian(filteredImg, cv2.CV_64F))
+    
+    titles = ["Original", "Sobelxy", "Canny", "Laplace"]
+    images = [filteredImg, sobelxy, canny, laplacian]
+    
+    for i in range(len(images)):
+        plt.subplot(2,2,i+1), plt.imshow(images[i], "gray")
+        plt.title(titles[i])
+        plt.xticks([]), plt.yticks([])
+    plt.show()
 
-    cv2.imshow("Sobel X", sobelx)
-    cv2.imshow("Sobel Y", sobely)
-    cv2.imshow("Sobel XY", sobelxy)
-    cv2.imshow("Laplace", laplacian)
-    cv2.imshow("Canny", canny)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow("Sobel X", sobelx)
+    #cv2.imshow("Sobel Y", sobely)
+    #cv2.imshow("Sobel XY", sobelxy)
+    #cv2.imshow("Laplace", laplacian)
+    #cv2.imshow("Canny", canny)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
 
 def compareThresholds(blurred_grayimg):
     th1 = cv2.adaptiveThreshold(blurred_grayimg, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
     th2 = cv2.adaptiveThreshold(blurred_grayimg, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
     _, th3 = cv2.threshold(blurred_grayimg, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)    
-    titles = ["Original", "Otsu", "Adaptive", "Gaussian"]
+    titles = ["Original", "Gaussian", "Adaptive", "Otsu"]
     images = [blurred_grayimg, th1, th2, th3]
 
     for i in range(len(images)):
@@ -74,9 +88,9 @@ def blobDetection(grayimg):
     parameters = cv2.SimpleBlobDetector_Params()
     
     parameters.filterByArea = True
-    parameters.minArea = 10 
+    parameters.minArea = 100 
     parameters.filterByCircularity = True 
-    parameters.minCircularity = 0.1
+    parameters.minCircularity = 0.5
 
     detector = cv2.SimpleBlobDetector_create(parameters)
 
@@ -101,6 +115,6 @@ def showComparison():
 
 compareThresholds(bilat)
 #blobDetection(gray)
-#compareEdges(bilat)
-#hueEdges(hsv)
-#contourDetection(gray)
+compareEdges(gauss)
+hueEdges(hsv)
+contourDetection(gray)
