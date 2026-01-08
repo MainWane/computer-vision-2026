@@ -2,12 +2,28 @@ import cv2
 import numpy as np 
 from matplotlib import pyplot as plt 
 
-gray = cv2.imread("../images/lego.jpg", 0)
-bgr = cv2.imread("../images/lego.jpg")
+# === LOAD IMAGE ===
+img_path = "C:/Users/ulrik/Desktop/cvmaterial/l4.jpg"
+bgr = cv2.imread(img_path)
+
+if bgr is None:
+    raise IOError("Billedet findes ikke!")
+
+# === RESIZE ===
+TARGET_WIDTH = 800
+h, w = bgr.shape[:2]
+scale = TARGET_WIDTH / w
+new_size = (int(w * scale), int(h * scale))
+
+bgr = cv2.resize(bgr, new_size)
+
+# === COLOR SPACES ===
+gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
 hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
 
-gauss = cv2.GaussianBlur(gray, (9, 9), 0)
-bilat = cv2.bilateralFilter(gray, 5, sigmaColor=125, sigmaSpace=75)
+# === FILTERS ===
+gauss = cv2.GaussianBlur(gray, (9, 11), 0)
+bilat = cv2.bilateralFilter(gray, 5, sigmaColor=75, sigmaSpace=75)
 
 cv2.imshow("Original", bgr)
 cv2.imshow("Gaussian", gauss)
@@ -19,7 +35,7 @@ def compareEdges(filteredImg):
     sobelx = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=5)
     sobely = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=5)
     sobelxy = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=5)
-    canny = cv2.Canny(image=filteredImg, threshold1=100, threshold2=200)
+    canny = cv2.Canny(image=filteredImg, threshold1=150, threshold2=200)
     laplacian = cv2.convertScaleAbs(cv2.Laplacian(filteredImg, cv2.CV_64F))
     
     titles = ["Original", "Sobelxy", "Canny", "Laplace"]
@@ -76,7 +92,7 @@ def hueEdges(hsvimg):
 def contourDetection(grayimg):
     #grayimg = cv2.bilateralFilter(grayimg, 9, sigmaColor=75, sigmaSpace=75)
     grayimg = cv2.GaussianBlur(grayimg, (5, 5), 0)
-    ret, thresh = cv2.threshold(grayimg, 150, 255, cv2.THRESH_BINARY)
+    ret, thresh = cv2.threshold(grayimg, 200, 220, cv2.THRESH_BINARY)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
     print(len(contours))
     grayCopy = grayimg.copy()
@@ -86,32 +102,32 @@ def contourDetection(grayimg):
     cv2.destroyAllWindows()
 
 
-def blobDetection(grayimg):
-    parameters = cv2.SimpleBlobDetector_Params()
+#def blobDetection(grayimg):
+    # parameters = cv2.SimpleBlobDetector_Params()
     
-    parameters.filterByArea = True
-    parameters.minArea = 100 
-    parameters.maxArea = 100000
-    parameters.filterByCircularity = True
-    parameters.minCircularity = 0.8
-    parameters.maxCircularity = 1.0
-    parameters.filterByInertia = True
-    parameters.minInertia = 0.1
-    parameters.filterByConvexity = True
-    parameters.minConvexity = 0.1
+    # parameters.filterByArea = True
+    # parameters.minArea = 100 
+    # parameters.maxArea = 100000
+    # parameters.filterByCircularity = True
+    # parameters.minCircularity = 0.8
+    # parameters.maxCircularity = 1.0
+    # parameters.filterByInertia = True
+    # parameters.minInertia = 0.1
+    # parameters.filterByConvexity = True
+    # parameters.minConvexity = 0.1
 
-    detector = cv2.SimpleBlobDetector_create(parameters)
+    # detector = cv2.SimpleBlobDetector_create(parameters)
 
-    keypoints = detector.detect(grayimg)
-    imageWithKeypoints = cv2.drawKeypoints(grayimg, 
-                                           keypoints, 
-                                           np.array([]), 
-                                           (0,0,255), 
-                                           cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS
-                                           )
-    cv2.imshow("Blobs", imageWithKeypoints)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # keypoints = detector.detect(grayimg)
+    # imageWithKeypoints = cv2.drawKeypoints(grayimg, 
+    #                                        keypoints, 
+    #                                        np.array([]), 
+    #                                        (0,0,255), 
+    #                                        cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS
+    #                                        )
+    # cv2.imshow("Blobs", imageWithKeypoints)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
 
 def showComparison():
@@ -121,8 +137,8 @@ def showComparison():
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-#compareThresholds(bilat)
+compareThresholds(gauss)
 #blobDetection(gray)
-compareEdges(bilat)
+compareEdges(gauss)
 #hueEdges(hsv)
-#contourDetection(gray)
+contourDetection(gauss)
