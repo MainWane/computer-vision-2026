@@ -1,27 +1,31 @@
 import cv2
 import numpy as np
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("http://192.168.87.15:8080/video")
 
 if not cap.isOpened():
-    raise IOError("Kan ikke åbne kamera")
+    raise RuntimeError("Kan ikke åbne telefonkamera-stream")
 
 range_color = {
-    'red': [(170, 100, 100), (180, 255, 255)],
-    'dark_green': [(30, 80, 80), (75, 255, 255)],
-    'yellow': [(20, 100, 100), (30, 255, 255)],
-    'blue': [(90, 100, 100), (140, 255, 255)],
+    'red': [(0, 150, 60), (8, 255, 255)],
+    'dark_green': [(50, 60, 10), (80, 255, 255)],
+    'yellow': [(17, 180, 120), (23, 255, 255)],
+    'blue': [(85, 50, 50), (135, 255, 255)],
 }
 
 min_area = 500
 TARGET_WIDTH = 600
 
+def show_hsv_on_click(event, x, y, flags, param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        hsv = param
+        print("HSV:", hsv[y, x])
+
 while True:
     ret, frame = cap.read()
     if not ret:
         break
-
-    # Resize
+# Resize
     scale = TARGET_WIDTH / frame.shape[1]
     frame = cv2.resize(frame, None, fx=scale, fy=scale)
 
@@ -41,10 +45,12 @@ while True:
             x, y, w, h = cv2.boundingRect(c)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    cv2.imshow("Lego detection (live)", frame)
 
-    # ESC for exit
-    if cv2.waitKey(1) & 0xFF == 27:
+    cv2.imshow("Lego detection", frame)
+    cv2.setMouseCallback("Lego detection", show_hsv_on_click, hsv_img)
+
+
+    if cv2.waitKey(1) & 0xFF == 27:  # ESC
         break
 
 cap.release()

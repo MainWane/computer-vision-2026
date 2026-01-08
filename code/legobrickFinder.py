@@ -8,7 +8,7 @@ img = cv2.resize(img, None, fx=scale, fy=scale)
 hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 range_color = {
-    'red': [(0, 100, 100), (10, 255, 255)],
+    'red': [(170, 100, 100), (180, 255, 255)],
     'dark_green': [(30, 80, 80), (75, 255, 255)], 
     'yellow': [(20, 100, 100), (30, 255, 255)],
     'blue': [(90, 100, 100), (140, 255, 255)], 
@@ -28,5 +28,4 @@ for contour in contour_filter:
     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
 cv2.imshow('DataFlair', img)
-cv2.waitKey(0)
 cv2.destroyAllWindows()
