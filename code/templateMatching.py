@@ -18,33 +18,13 @@ def preprocess_image(path):
     bgr = cv.GaussianBlur(bgr, (5, 5), 0)
     return bgr
 
-# Grayscale preprocess
-# def preprocess_image(path):
-#     bgr = cv.imread(path)
-#     if bgr is None:
-#         raise IOError(f"Billedet findes ikke: {path}")
-
-#     # Resize 
-#     h, w = bgr.shape[:2]
-#     scale = TARGET_WIDTH / w
-#     new_size = (int(w * scale), int(h * scale))
-#     bgr = cv.resize(bgr, new_size, interpolation=cv.INTER_AREA)
-
-#     # Grayscale
-#     gray = cv.cvtColor(bgr, cv.COLOR_BGR2GRAY)
-
-#     # Smoothing 
-#     gray = cv.GaussianBlur(gray, (5, 5), 0)
-
-#     return gray
-
-img = cv.imread('C:/Users/ulrik/Desktop/cvmaterial/b1.jpg')
+img = preprocess_image('C:/Users/ulrik/Desktop/cvmaterial/l1.jpg')
 assert img is not None, "file could not be read, check with os.path.exists()"
 img2 = img.copy()
 
-template = cv.imread('../images/lego.jpg')
+template = preprocess_image('../images/legocrop.jpg')
 assert template is not None, "file could not be read, check with os.path.exists()"
-w, h = template.shape[::-1]
+w, h = template.shape[1], template.shape[0]
 
 # All the 6 methods for comparison in a list
 methods = ['TM_CCOEFF', 'TM_CCOEFF_NORMED', 'TM_CCORR',
@@ -65,12 +45,14 @@ for meth in methods:
         top_left = max_loc
     bottom_right = (top_left[0] + w, top_left[1] + h)
 
-    cv.rectangle(img,top_left, bottom_right, 255, 2)
+    cv.rectangle(img, top_left, bottom_right, (0, 255, 0), 3)
+     
+     # Konverter BGR til RGB for korrekt farve display
+    img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
 
-    plt.subplot(121),plt.imshow(res,cmap = 'gray')
+    plt.subplot(121), plt.imshow(res, cmap='gray')
     plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
-    plt.subplot(122),plt.imshow(img,cmap = 'gray')
+    plt.subplot(122), plt.imshow(img_rgb)
     plt.title('Detected Point'), plt.xticks([]), plt.yticks([])
     plt.suptitle(meth)
-
     plt.show()
