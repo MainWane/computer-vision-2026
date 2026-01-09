@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt 
 
 # === LOAD IMAGE ===
-img_path = "C:/Users/ulrik/Desktop/cvmaterial/l4.jpg"
+img_path = "C:/Users/ulrik/Desktop/cvmaterial/l1.jpg"
 bgr = cv2.imread(img_path)
 
 if bgr is None:
@@ -25,17 +25,17 @@ hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
 gauss = cv2.GaussianBlur(gray, (9, 11), 0)
 bilat = cv2.bilateralFilter(gray, 5, sigmaColor=75, sigmaSpace=75)
 
-cv2.imshow("Original", bgr)
-cv2.imshow("Gaussian", gauss)
-cv2.imshow("Bilateral", bilat)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# cv2.imshow("Original", bgr)
+# cv2.imshow("Gaussian", gauss)
+# cv2.imshow("Bilateral", bilat)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
 
 def compareEdges(filteredImg):
     sobelx = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=5)
     sobely = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=5)
     sobelxy = cv2.Sobel(src=filteredImg, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=5)
-    canny = cv2.Canny(image=filteredImg, threshold1=150, threshold2=200)
+    canny = cv2.Canny(image=filteredImg, threshold1=0, threshold2=55)
     laplacian = cv2.convertScaleAbs(cv2.Laplacian(filteredImg, cv2.CV_64F))
     
     titles = ["Original", "Sobelxy", "Canny", "Laplace"]
@@ -141,4 +141,4 @@ compareThresholds(gauss)
 #blobDetection(gray)
 compareEdges(gauss)
 #hueEdges(hsv)
-contourDetection(gauss)
+#contourDetection(gauss)

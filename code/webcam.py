@@ -7,9 +7,10 @@ if not cap.isOpened():
     raise RuntimeError("Kan ikke åbne telefonkamera-stream")
 
 range_color = {
-    'red': [(0, 150, 60), (8, 255, 255)],
+    'red1': [(0, 150, 60), (8, 255, 255)],
+    'red2': [(175, 100, 100), (185, 255, 255)],
     'dark_green': [(50, 60, 10), (80, 255, 255)],
-    'yellow': [(17, 180, 120), (23, 255, 255)],
+    'yellow': [(18, 40, 150), (25, 255, 255)],
     'blue': [(85, 50, 50), (135, 255, 255)],
 }
 
@@ -40,11 +41,13 @@ while True:
         mask_comb, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
     )
 
+    img_area = frame.shape[0] * frame.shape[1]
+    max_area = img_area * 0.12
     for c in contours:
-        if cv2.contourArea(c) > min_area:
+        area = cv2.contourArea(c)
+        if min_area < area < max_area:
             x, y, w, h = cv2.boundingRect(c)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
 
     cv2.imshow("Lego detection", frame)
     cv2.setMouseCallback("Lego detection", show_hsv_on_click, hsv_img)

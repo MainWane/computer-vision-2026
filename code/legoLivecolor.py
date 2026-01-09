@@ -8,9 +8,16 @@ if not cap.isOpened():
 
 range_color = {
     'red': [(170, 100, 100), (176, 255, 255)],
-    'dark_green': [(30, 80, 50), (75, 255, 255)],
+    'green': [(40, 80, 50), (85, 255, 255)],
     'yellow': [(14, 100, 100), (30, 255, 255)],
     'blue': [(90, 100, 100), (140, 255, 255)],
+}
+
+draw_colors = {
+    'red': (0, 0, 255),
+    'green': (0, 255, 0),
+    'yellow': (0, 255, 255),
+    'blue': (255, 0, 0),
 }
 
 min_area = 500
@@ -43,12 +50,44 @@ while True:
 
     img_area = frame.shape[0] * frame.shape[1]
     max_area = img_area * 0.22
-    
-    for c in contours:
-        area = cv2.contourArea(c)
-        if min_area < area < max_area:
-            x, y, w, h = cv2.boundingRect(c)
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+    for color_name, (lower, upper) in range_color.items():
+        mask = cv2.inRange(
+            hsv_img,
+            np.array(lower),
+            np.array(upper)
+    )
+
+        contours, _ = cv2.findContours(
+            mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+    )
+
+        for c in contours:
+            area = cv2.contourArea(c)
+            if min_area < area < max_area:
+                x, y, w, h = cv2.boundingRect(c)
+
+                # Tegn farvet firkant
+                cv2.rectangle(
+                    frame,
+                    (x, y),
+                    (x + w, y + h),
+                    draw_colors[color_name],
+                    2
+                )
+
+                # Tekstlabel
+                cv2.putText(
+                    frame,
+                    color_name,
+                    (x, y - 5),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5,
+                    draw_colors[color_name],
+                    2,
+                    cv2.LINE_AA
+                )
+
 
     cv2.imshow("Lego detection", frame)
     cv2.setMouseCallback("Lego detection", show_hsv_on_click, hsv_img)
