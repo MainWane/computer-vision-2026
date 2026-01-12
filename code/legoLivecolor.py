@@ -67,7 +67,7 @@ while True:
             if min_area < area < max_area:
                 x, y, w, h = cv2.boundingRect(c)
 
-                # Tegn farvet firkant
+                # Tegner farvet firkant
                 cv2.rectangle(
                     frame,
                     (x, y),
