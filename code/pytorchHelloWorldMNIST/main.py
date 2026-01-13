@@ -112,7 +112,7 @@ def main():
     Derfor indstiller vi her hvor mange gange vi skal træne på hele sættet.
     Også en kunst at sætte, da nettet på et tidspunkt ikke kan lære mere ud af dataen.
     '''
-    parser.add_argument('--epochs', type=int, default=14, metavar='N',
+    parser.add_argument('--epochs', type=int, default=4, metavar='N',
                         help='number of epochs to train (default: 14)')
     '''
     En CNN (og mange andre neurale netværk) lærer på data ved at respondere på et "tab" defineret fra en loss function.
