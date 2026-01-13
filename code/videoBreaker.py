@@ -6,10 +6,14 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 # data/train/ugli
-OUT_DIR = PROJECT_ROOT / "code" / "data" / "train" / "ugli"
+OUT_DIR = PROJECT_ROOT / "code" / "data" / "test" / "ugli"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-cap = cv2.VideoCapture("C:/Users/ulrik/Desktop/cvmaterial/bv1.mp4")
+# data/test/ugli
+# OUT_DIR = PROJECT_ROOT / "code" / "data" / "test" / "ugli"
+# OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+cap = cv2.VideoCapture("C:/Users/ulrik/Desktop/cvmaterial/bv4.mp4")
 
 frame_count = 0
 saved_count = 0
