@@ -6,9 +6,10 @@ from pathlib import Path
 # Projektrod = computer-vision-2026 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-VIDEO_PATH = "C:/Users/ulrik/Desktop/cvmaterial/pv3.mp4"            # video
-OUT_DIR = PROJECT_ROOT / "code" / "data" / "train" / "panda"        # mappe hvor frames gemmes 
-FRAME_STEP = 29                                                     # gemmer hver helst 30. frame, ca. 1 frame hver sekund 
+VIDEO_PATH = "C:/Users/ulrik/Desktop/cvmaterial/utest.mp4"      
+   # video
+OUT_DIR = PROJECT_ROOT / "code" / "data" / "test" / "ugli"         # mappe hvor frames gemmes 
+FRAME_STEP = 15                                                    # gemmer hver helst 30. frame, ca. 1 frame hver sekund 
 
 os.makedirs(OUT_DIR, exist_ok=True)
 

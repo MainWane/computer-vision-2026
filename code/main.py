@@ -3,10 +3,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import DataLoader
 from dataloader import trainData, testData
+from preprocessing import get_transforms
 
 '''
 Hvis i vil lære mere eller i dybden, så er artikler på https://machinelearningmastery.com/ anbefalelsesværdige.
@@ -166,10 +166,8 @@ def main():
         train_kwargs.update(accel_kwargs)
         test_kwargs.update(accel_kwargs)
 
-    transform=transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
+    transform = get_transforms(mode='train')
+    train_loader = DataLoader(trainData, batch_size=args.batch_size, shuffle=True)
 
     train_loader = DataLoader(
     trainData,
