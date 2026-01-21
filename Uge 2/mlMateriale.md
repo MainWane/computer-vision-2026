@@ -13,7 +13,20 @@ Først installér PyTorch, et af de machine learning biblioteker der finder bred
 
 Efter vi har lært fra basics, at klargøre datasæt, at lave om på lagene i en model, og kunne forbedre en model en smule med parametre, så er det tid til at lære hvordan forskellige kendte modelarkitekturer er bygget op.
 
-
 * YOLO. En af de mest simple arkitekturer der finder anvendelse til differentiering mellem flere klasser. Den er egentligt ret ringe, men meget let at implementere, og kræver ikke så mange resourcer hvilket gør det muligt ret billigt at implementere den. [https://www.geeksforgeeks.org/machine-learning/yolo-you-only-look-once-real-time-object-detection/](https://www.geeksforgeeks.org/machine-learning/yolo-you-only-look-once-real-time-object-detection/)
+
 * VGG-Net. En slags "moderarkitektur", altså baserer mange mere avancerede/sofistikerede netværk sig på denne. Den er ikke meget anderledes end den vi bruger i det basale eksempel ovenover. [https://www.geeksforgeeks.org/computer-vision/vgg-net-architecture-explained/](https://www.geeksforgeeks.org/computer-vision/vgg-net-architecture-explained/)
+
 * ResNet - større model, bedre til at differentiere mange forskellige objekter. Den er delvist baseret på VGG19. Bliv ikke skræmt af de mange lag, mønsteret er bare flere convolution lag med tiltagende større kernels. [https://www.geeksforgeeks.org/deep-learning/residual-networks-resnet-deep-learning/](https://www.geeksforgeeks.org/deep-learning/residual-networks-resnet-deep-learning/)
+
+Optimering af træning
+
+Beskrivelser af de parametre der er justerbare og påvirker træning: https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html
+    
+Visualisér modeller og log træningsstatistikker: https://docs.pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html
+
+Alle typer loss funktioner, layers osv. der er tilgængelige via PyTorch API'en: https://docs.pytorch.org/docs/stable/nn.html#loss-functions
+    
+Profiler: Check hardware performance for din model samt track antal kald: https://docs.pytorch.org/tutorials/recipes/recipes/profiler_recipe.html
+    
+Confusion matrix - En lidt bedre måde at vise modellens performance end accuracy: https://sklearn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html

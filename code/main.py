@@ -4,9 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
-from torch.utils.data import DataLoader
 from dataloader import trainData, testData
-from preprocessing import get_transforms
 
 '''
 Hvis i vil lære mere eller i dybden, så er artikler på https://machinelearningmastery.com/ anbefalelsesværdige.
@@ -29,9 +27,9 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(3, 32, 3, 1)
         self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout(0.25)
-        self.dropout2 = nn.Dropout(0.5)
-        self.fc1 = nn.Linear(64 * 30 * 30, 128)
+        self.dropout1 = nn.Dropout(0.2)
+        self.dropout2 = nn.Dropout(0.35)
+        self.fc1 = nn.Linear(57600, 128)
         self.fc2 = nn.Linear(128, 3)
 
 
@@ -114,7 +112,7 @@ def main():
     Derfor indstiller vi her hvor mange gange vi skal træne på hele sættet.
     Også en kunst at sætte, da nettet på et tidspunkt ikke kan lære mere ud af dataen.
     '''
-    parser.add_argument('--epochs', type=int, default=14, metavar='N',
+    parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
     '''
     En CNN (og mange andre neurale netværk) lærer på data ved at respondere på et "tab" defineret fra en loss function.
@@ -124,7 +122,7 @@ def main():
     I værste fald kan en forhøjet learning rate gøre klassificeringen nærmest random igen efter flere epochs,
     et fænomen vi kalder "exploding gradient".
     '''
-    parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
+    parser.add_argument('--lr', type=float, default=1.5, metavar='LR',
                         help='learning rate (default: 1.0)')
     '''
     Learning rate decay. Learning rate bliver lavere med denne faktor efter et antal epochs.
@@ -158,6 +156,7 @@ def main():
 
     train_kwargs = {'batch_size': args.batch_size}
     test_kwargs = {'batch_size': args.test_batch_size}
+
     if use_accel:
         accel_kwargs = {'num_workers': 1,
                         'persistent_workers': True,
@@ -166,26 +165,13 @@ def main():
         train_kwargs.update(accel_kwargs)
         test_kwargs.update(accel_kwargs)
 
-    transform = get_transforms(mode='train')
-    train_loader = DataLoader(trainData, batch_size=args.batch_size, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(trainData, **train_kwargs)
+    test_loader  = torch.utils.data.DataLoader(testData, **test_kwargs)
 
-    train_loader = DataLoader(
-    trainData,
-    batch_size=args.batch_size,
-    shuffle=True
-)
 
-    test_loader = DataLoader(
-    testData,
-    batch_size=args.test_batch_size,
-    shuffle=False
-)
-
-    train_loader = torch.utils.data.DataLoader(trainData,**train_kwargs)
-    test_loader = torch.utils.data.DataLoader(testData, **test_kwargs)
 
     model = Net().to(device)
-    optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
@@ -194,8 +180,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "ugli_cnn.pt")
-
+        torch.save(model.state_dict(), "bamsespotter_cnn.pt")
 
 if __name__ == '__main__':
     main()

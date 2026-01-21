@@ -14,19 +14,22 @@ def get_transforms(mode='train', image_size=(64, 64)):
     """
     if mode == 'train':
         transform = transforms.Compose([
-            transforms.Resize(image_size),
-            transforms.RandomHorizontalFlip(0.5),
-            transforms.RandomVerticalFlip(0.3),
+            transforms.Resize((image_size)),
+            transforms.RandomHorizontalFlip(p=0.5),
             transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5),
-                                 (0.5, 0.5, 0.5))
+            transforms.Normalize(
+                mean=(0.485, 0.456, 0.406),
+                std=(0.229, 0.224, 0.225)
+            )
+
         ])
     elif mode == 'test':
         transform = transforms.Compose([
             transforms.Resize(image_size),
             transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5),
-                                 (0.5, 0.5, 0.5))
+            transforms.Normalize(
+                mean=(0.485, 0.456, 0.406),
+                std=(0.229, 0.224, 0.225))
         ])
     else:
         raise ValueError(f"Unknown mode: {mode}. Use 'train' or 'test'.")
